@@ -2,7 +2,7 @@ package com.ing.assignment.handler;
 
 import com.ing.assignment.enums.GameCommand;
 import com.ing.assignment.enums.GameStatus;
-import com.ing.assignment.model.dto.Board;
+import com.ing.assignment.model.Board;
 import com.ing.assignment.service.GameService;
 import com.ing.assignment.service.impl.GameServiceImpl;
 import com.ing.assignment.util.GameUtil;

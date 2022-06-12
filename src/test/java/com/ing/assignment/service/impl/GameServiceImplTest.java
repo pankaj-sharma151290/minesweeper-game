@@ -3,7 +3,7 @@ package com.ing.assignment.service.impl;
 import com.ing.assignment.enums.GameStatus;
 import com.ing.assignment.enums.TileState;
 import com.ing.assignment.enums.TileType;
-import com.ing.assignment.model.dto.Board;
+import com.ing.assignment.model.Board;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

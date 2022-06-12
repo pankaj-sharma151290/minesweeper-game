@@ -1,6 +1,6 @@
 package com.ing.assignment.service;
 
-import com.ing.assignment.model.dto.Board;
+import com.ing.assignment.model.Board;
 
 public interface GameService {
 

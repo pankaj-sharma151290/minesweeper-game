@@ -1,8 +1,7 @@
-package com.ing.assignment.model.dto;
+package com.ing.assignment.model;
 
 import com.ing.assignment.enums.TileState;
 import com.ing.assignment.enums.TileType;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

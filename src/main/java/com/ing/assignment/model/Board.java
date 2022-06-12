@@ -1,4 +1,4 @@
-package com.ing.assignment.model.dto;
+package com.ing.assignment.model;
 
 import com.ing.assignment.enums.GameStatus;
 import lombok.Data;

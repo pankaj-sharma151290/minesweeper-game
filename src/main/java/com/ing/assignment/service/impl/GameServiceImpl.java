@@ -2,8 +2,8 @@ package com.ing.assignment.service.impl;
 
 import com.ing.assignment.enums.TileState;
 import com.ing.assignment.enums.TileType;
-import com.ing.assignment.model.dto.Board;
-import com.ing.assignment.model.dto.Tile;
+import com.ing.assignment.model.Board;
+import com.ing.assignment.model.Tile;
 import com.ing.assignment.service.GameService;
 import com.ing.assignment.util.GameUtil;
 
