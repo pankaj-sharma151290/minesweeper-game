@@ -4,8 +4,9 @@ import com.ing.assignment.enums.TileState;
 import com.ing.assignment.enums.TileType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
+@NoArgsConstructor
 public @Data
 class Tile {
     private int rowIndex, colIndex;

@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 public enum GameCommand {
+
     HELP("help"), SELECT("select"), FLAG("flag"), SHOW_BOARD("showboard"), EXIT("exit"), RESTART("restart");
 
     private String command;
@@ -16,8 +17,8 @@ public enum GameCommand {
         return this.command;
     }
 
-    public static Optional<GameCommand> fromString(String command){
-        return Arrays.stream(values()).filter(gc->gc.command.equalsIgnoreCase(command)).findFirst();
+    public static Optional<GameCommand> fromString(String command) {
+        return Arrays.stream(values()).filter(gc -> gc.command.equalsIgnoreCase(command)).findFirst();
     }
 
 }

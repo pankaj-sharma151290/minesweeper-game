@@ -1,72 +1,103 @@
-package com.ing.assignment.util;
+package com.ing.assignment.handler;
 
 import com.ing.assignment.enums.GameCommand;
 import com.ing.assignment.enums.GameStatus;
 import com.ing.assignment.model.dto.Board;
 import com.ing.assignment.service.GameService;
 import com.ing.assignment.service.impl.GameServiceImpl;
+import com.ing.assignment.util.GameUtil;
 
-import java.util.Optional;
 import java.util.Scanner;
 
-public class GameUtils {
+public class GameHandler {
+    private GameService gameService = new GameServiceImpl();
+    private Scanner scanner = new Scanner(System.in);
+    private Board board;
+    private int nBoardRow = 0, nBoardCol = 0;
 
-    private static GameService gameService = new GameServiceImpl();
-    private static Scanner scanner = new Scanner(System.in);
-    private static Board board;
-    private static int nBoardRow = 0, nBoardCol = 0, nMines = 0;
-
-    public static Board startGame() {
+    public void startGame() {
         System.out.println();
         System.out.println("Welcome to Minesweeper Game.");
+        int nMines;
         do {
             System.out.println("Enter the grid height (Should not be >50) : ");
             nBoardRow = scanner.nextInt();
             System.out.println("Enter the grid width (Should not be >50) : ");
             nBoardCol = scanner.nextInt();
-            System.out.println("Enter the number of mines : ");
+            System.out.println("Enter the number of mines (should be < height*width): ");
             nMines = scanner.nextInt();
-        } while (nBoardRow > 50 || nBoardCol > 50);
+        } while (nBoardRow > 50 || nBoardCol > 50 || nMines > nBoardRow * nBoardCol);
         System.out.println("Starting Game:");
         board = gameService.startGame(nBoardRow, nBoardCol, nMines);
-        GameUtils.help();
-        board.toString();
-        return board;
+        help();
+        GameUtil.printBoard(board);
     }
 
-    public static void help() {
+    /**
+     * Displays the acceptable commands as user input for the game.
+     */
+    public void help() {
         System.out.println();
         System.out.println("Valid Commands:");
         System.out.println("           1. \"help\": opens the help menu");
         System.out.println("           2. \"select\": specify which tile you want to check");
         System.out.println("           3. \"flag\": specify which tile you want to flag");
         System.out.println("           4. \"restart\": start a new game");
-        System.out.println("           5. \"quit\": to quit the game");
+        System.out.println("           5. \"exit\": to quit the game");
         System.out.println("           6. \"showBoard\": to display the current status");
         System.out.println();
     }
 
-    public static void selectTile() {
-        int rowIndex = 0, colIndex = 0;
-        boolean gameOver = false;
+    /**
+     * Processes the game as per user input.
+     *
+     * @param command user input
+     */
+    public boolean processGame(GameCommand command) {
+        boolean exitGame=false;
+        switch (command) {
+            case HELP:
+                help();
+                break;
+            case SELECT:
+                selectTile();
+                break;
+            case FLAG:
+                flagTile();
+                break;
+            case RESTART:
+                startGame();
+                break;
+            case EXIT:
+                exitGame = exitGame();
+                break;
+            case SHOW_BOARD:
+                GameUtil.printBoard(board);
+                break;
+        }
+        return exitGame;
+    }
+
+    public void selectTile() {
+        int rowIndex, colIndex;
+        boolean gameOver;
         System.out.println("Enter row no from 1 to " + nBoardRow + ": ");
         rowIndex = scanner.nextInt() - 1;
         System.out.println("Enter column no from 1 to " + nBoardCol + ": ");
         colIndex = scanner.nextInt() - 1;
-
-        if ((rowIndex >= 0 && rowIndex < nBoardRow) && (colIndex >= 0 && colIndex < nBoardCol)) {
+        if (isTileIndicesInRange(rowIndex, colIndex)) {
             gameOver = gameService.selectTile(board, rowIndex, colIndex);
             if (gameOver && board.getNUncoveredClearCells() == (board.getNRows() * board.getNCols()) - board.getNMines()) {
-                System.out.println("\n\nYou have Won!!");
+                System.out.println("\n\nCongratulations, You have Won!!");
                 board.setGameStatus(GameStatus.WON);
-                board.toString();
+                GameUtil.printBoard(board);
                 System.out.println("\n\nYou can restart or exit the game!!");
             } else if (gameOver) {
-                System.out.println("\n\nYou hit the mine, try again!!");
-                board.toString();
+                System.out.println("\n\nYou have hit the mine, try again!!");
+                GameUtil.printBoard(board);
             } else {
                 System.out.println("\n\n");
-                board.toString();
+                GameUtil.printBoard(board);
                 System.out.println("\n\n");
             }
         } else {
@@ -74,54 +105,30 @@ public class GameUtils {
         }
     }
 
-    public static void flagTile() {
-        int rowIndex = 0, colIndex = 0;
+    public void flagTile() {
+        int rowIndex, colIndex;
         System.out.println("Enter row no from 1 to " + nBoardRow + ": ");
         rowIndex = scanner.nextInt() - 1;
-
         System.out.println("Enter column no from 1 to " + nBoardCol + ": ");
         colIndex = scanner.nextInt() - 1;
-
-        if ((rowIndex >= 0 && rowIndex < nBoardRow) && (colIndex >= 0 && colIndex < nBoardCol)) {
-            gameService.selectFlag(board, rowIndex, colIndex);
+        if (isTileIndicesInRange(rowIndex, colIndex)) {
+            gameService.addFlag(board, rowIndex, colIndex);
             System.out.println("\n\n");
-            board.toString();
+            GameUtil.printBoard(board);
             System.out.println("\n\n");
         } else {
             System.out.println("You have entered incorrect row/column no, Please try again.");
         }
     }
 
-    public static void processGame(Optional<GameCommand> command) {
-        if (command.isPresent()) {
-            switch (command.get()) {
-                case HELP:
-                    GameUtils.help();
-                    break;
-                case SELECT:
-                    GameUtils.selectTile();
-                    break;
-                case FLAG:
-                    GameUtils.flagTile();
-                    break;
-                case RESTART:
-                    GameUtils.startGame();
-                    break;
-                case EXIT:
-                    System.out.println("Exit Game.");
-                    System.exit(0);
-                    break;
-                case SHOW_BOARD:
-                    GameUtils.showGameBoard();
-                    break;
-            }
-        }
-        else{
-            System.out.println("Unknown command, Please enter valid command. enter help for list of acceptable commands.");
-        }
+    public boolean exitGame() {
+        System.out.println("Exit Game.");
+        scanner.close();
+        return true;
     }
 
-    public static void showGameBoard() {
-        board.toString();
+    private boolean isTileIndicesInRange(int rowIndex, int colIndex) {
+        return (rowIndex >= 0 && rowIndex < nBoardRow) && (colIndex >= 0 && colIndex < nBoardCol);
     }
+
 }

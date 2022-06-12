@@ -1,24 +1,36 @@
 package com.ing.assignment;
 
 import com.ing.assignment.enums.GameCommand;
-import com.ing.assignment.util.GameUtils;
+import com.ing.assignment.handler.GameHandler;
 
 import java.util.Optional;
 import java.util.Scanner;
 
 public class MinesweeperGame {
 
+    /**
+     * Starting point for game execution.
+     *
+     * @param args args
+     */
     public static void main(String[] args) {
-        try(Scanner scanner = new Scanner(System.in)) {
-            GameUtils.startGame();
+        GameHandler gameHandler = new GameHandler();
+        boolean exitGame = false;
+        try (Scanner scanner = new Scanner(System.in)) {
+            gameHandler.startGame();
             do {
                 System.out.print("$ ");
                 String userInput;
                 userInput = scanner.next();
                 userInput = userInput.trim().toLowerCase();
                 Optional<GameCommand> command = GameCommand.fromString(userInput);
-                GameUtils.processGame(command);
-            } while (true);
+
+                if (command.isPresent()) {
+                    exitGame = gameHandler.processGame(command.get());
+                } else {
+                    System.out.println("Unknown command, Please enter valid command. enter help for list of acceptable commands.");
+                }
+            } while (!exitGame);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
