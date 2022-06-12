@@ -13,20 +13,20 @@ public class GameHandler {
     private GameService gameService = new GameServiceImpl();
     private Scanner scanner = new Scanner(System.in);
     private Board board;
-    private int nBoardRow = 0, nBoardCol = 0;
+    private int nBoardRow = 0, nBoardCol = 0, nMines = 0;
 
     public void startGame() {
         System.out.println();
         System.out.println("Welcome to Minesweeper Game.");
-        int nMines;
+        System.out.println();
         do {
-            System.out.println("Enter the grid height (Should not be >50) : ");
+            System.out.println("Enter the grid height (Should be >0 &  <50) : ");
             nBoardRow = scanner.nextInt();
-            System.out.println("Enter the grid width (Should not be >50) : ");
+            System.out.println("Enter the grid width (Should be >0 &  <50) : ");
             nBoardCol = scanner.nextInt();
-            System.out.println("Enter the number of mines (should be < height*width): ");
+            System.out.println("Enter the number of mines (should be < height*width  & >0): ");
             nMines = scanner.nextInt();
-        } while (nBoardRow > 50 || nBoardCol > 50 || nMines > nBoardRow * nBoardCol);
+        } while (isBoardSizeOutOfRange());
         System.out.println("Starting Game:");
         board = gameService.startGame(nBoardRow, nBoardCol, nMines);
         help();
@@ -54,7 +54,7 @@ public class GameHandler {
      * @param command user input
      */
     public boolean processGame(GameCommand command) {
-        boolean exitGame=false;
+        boolean exitGame = false;
         switch (command) {
             case HELP:
                 help();
@@ -129,6 +129,10 @@ public class GameHandler {
 
     private boolean isTileIndicesInRange(int rowIndex, int colIndex) {
         return (rowIndex >= 0 && rowIndex < nBoardRow) && (colIndex >= 0 && colIndex < nBoardCol);
+    }
+
+    private boolean isBoardSizeOutOfRange() {
+        return nBoardRow < 1 || nBoardRow > 50 || nBoardCol < 1 || nBoardCol > 50 || nMines < 1 || nMines > nBoardRow * nBoardCol;
     }
 
 }
