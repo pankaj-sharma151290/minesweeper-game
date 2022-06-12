@@ -3,7 +3,7 @@ Minesweeper is a single-player puzzle video game. The objective of the game is t
 
 ## Implementation Overview
 
-This project is JAVA implementation for Minsweeper game. The game starts upon running class MinesweeperGame or jar.
+This project is JAVA implementation for Minsweeper game. The game starts upon running class MinesweeperGame, jar or using docker.
 
 ### Features covered
 1. Single Player Game.
@@ -21,27 +21,49 @@ This project is JAVA implementation for Minsweeper game. The game starts upon ru
 2. Rest APIs can be exposed by adding controller, And same code can be used from the service layer.
 
 ## Getting Started
-The project is Java application.
+
+The project is dockerized.
+There is no UI in the application therefore the application interact with user through console.
+
+### The application is built on below stack.
+
+* Java
+* Spring Boot Console Application
+* Docker
+
 
 ### Prerequisites
 
 Things required to run the application.
 
 ```
-JAVA (version 8 or above)
-IDE (InteliJ, Eclipse etc...)
+Docker
+OR
+JAVA 8 or above
 ```
 
 ### How to run
 ```
 Checkout the code from github : <https://github.com/pankaj-sharma151290/minesweeper-game.git>
 
+=> Follow steps to run using executable jar
+1. cd minesweeper-game
+2. Open CMD/Terminal
+3. mvn clean package
+4. cd target
+5. java -jar minesweeper-game-0.0.1-SNAPSHOT.jar
+
+=> Follow steps to run using Docker
+1. cd minesweeper-game
+2. Open CMD/Terminal
+3. mvn clean package
+4. docker build --no-cache -t minesweeper-game:1.0.0 .
+5. docker run --name minesweeper minesweeper-game:1.0.0
+
 => Follow below steps to run from IDE
 1. Open checked out project <minesweeper-game>
 2. Run Main class <MinesweeperGame.java>, to start the game.
 3. You will see in console game is started and wating for your input.
-
-=> Follow steps run from executable JAR.
 
 ```
 ## Access application 
@@ -52,7 +74,7 @@ There is no web UI for this application, It can be accessed through console only
 
 ## Test cases
 
-The application has Unit Test as well as Integration Test written.
+The application has Unit Test written.
 
 ### Unit Test (coverage ~ 100%)
  The Unit test cases are available for service layer under <test> package 
@@ -126,4 +148,4 @@ Enter column no from 1 to 10:
 ````
 
 6. To exit, restart, display board and get the list of valid commands' player has to enter exit, restart, showboard and help respectively.  
-
+#### Note: On every successful command user will get the status of the game with board and its details.
