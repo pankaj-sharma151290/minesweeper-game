@@ -1,14 +1,45 @@
 package com.ing.assignment;
 
-import org.springframework.boot.SpringApplication;
+import com.ing.assignment.enums.GameCommand;
+import com.ing.assignment.handler.GameHandler;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import java.util.Optional;
+import java.util.Scanner;
 
 @SpringBootApplication
-public class MinesweeperGameApplication {
+public class MinesweeperGameApplication implements CommandLineRunner {
 
+    /**
+     * Starting point for game execution.
+     *
+     * @param args args
+     */
     public static void main(String[] args) {
+        GameHandler gameHandler = new GameHandler();
+        boolean exitGame = false;
+        try (Scanner scanner = new Scanner(System.in)) {
+            gameHandler.startGame();
+            do {
+                System.out.print("$ ");
+                String userInput;
+                userInput = scanner.next();
+                userInput = userInput.trim().toLowerCase();
+                Optional<GameCommand> command = GameCommand.fromString(userInput);
 
-        SpringApplication.run(MinesweeperGameApplication.class, args);
+                if (command.isPresent()) {
+                    exitGame = gameHandler.processGame(command.get());
+                } else {
+                    System.out.println("Unknown command, Please enter valid command. enter help for list of acceptable commands.");
+                }
+            } while (!exitGame);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @Override
+    public void run(String... args) {
     }
 }
