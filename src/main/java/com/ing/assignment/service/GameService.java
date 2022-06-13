@@ -10,5 +10,5 @@ public interface GameService {
 
     Board resetBoardWithSameMines(Board board);
 
-    void addFlag(Board board, int rowIndex, int colIndex);
+    void flagUnFlagTile(Board board, int rowIndex, int colIndex);
 }

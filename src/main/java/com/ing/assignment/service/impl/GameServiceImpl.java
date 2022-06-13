@@ -6,10 +6,12 @@ import com.ing.assignment.model.Board;
 import com.ing.assignment.model.Tile;
 import com.ing.assignment.service.GameService;
 import com.ing.assignment.util.GameUtil;
+import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.Random;
 
+@Service
 public class GameServiceImpl implements GameService {
 
     @Override
@@ -37,8 +39,8 @@ public class GameServiceImpl implements GameService {
         Random random = new Random();
         int nMines = board.getNMines();
         while (nMines > 0) {
-            int rowIndex = random.nextInt(board.getNRows()-1);
-            int colIndex = random.nextInt(board.getNCols()-1);
+            int rowIndex = random.nextInt(board.getNRows() - 1);
+            int colIndex = random.nextInt(board.getNCols() - 1);
             Tile randomTile = board.getTiles()[rowIndex][colIndex];
             if (randomTile.getType() != TileType.MINED && !randomTile.equals(firstSelectedTile)) {
                 randomTile.setType(TileType.MINED);
@@ -81,7 +83,8 @@ public class GameServiceImpl implements GameService {
                     uncoverTiles(board, adjacentTile, adjacentTileRowIndex, adjacentTileColIndex);
                 }
             }
-        } else {
+        }
+        else {
             selectedTile.setState(TileState.UNCOVERED);
             board.setNUncoveredClearCells(board.getNUncoveredClearCells() + 1);
         }
@@ -98,7 +101,7 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public void addFlag(Board board, int rowIndex, int colIndex) {
+    public void flagUnFlagTile(Board board, int rowIndex, int colIndex) {
         Tile selectedTile = board.getTiles()[rowIndex][colIndex];
         if (selectedTile.getState() == TileState.COVERED) {
             selectedTile.setState(TileState.FLAGGED);

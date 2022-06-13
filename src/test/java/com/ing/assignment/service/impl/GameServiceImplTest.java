@@ -67,24 +67,24 @@ public class GameServiceImplTest {
     }
 
     @Test
-    @DisplayName(value = "Test addFlag.")
+    @DisplayName(value = "Test flagUnFlagTile.")
     public void testAddFlag() {
         Board board = gameService.startGame(5, 5, 5);
         gameService.selectTile(board, 4, 4);
         board.getTiles()[2][1].setState(TileState.COVERED);
-        gameService.addFlag(board, 2, 1);
+        gameService.flagUnFlagTile(board, 2, 1);
         assertThat(board.getTiles()[2][1].getState(), is(TileState.FLAGGED));
         assertThat(board.getNFlags(), is(1));
     }
 
     @Test
-    @DisplayName(value = "Test addFlag for flagged Tile.")
+    @DisplayName(value = "Test flagUnFlagTile for flagged Tile.")
     public void testReAddFlag() {
         Board board = gameService.startGame(5, 5, 5);
         gameService.selectTile(board, 4, 4);
         board.getTiles()[2][1].setState(TileState.COVERED);
-        gameService.addFlag(board, 2, 1);
-        gameService.addFlag(board, 2, 1);
+        gameService.flagUnFlagTile(board, 2, 1);
+        gameService.flagUnFlagTile(board, 2, 1);
         assertThat(board.getTiles()[2][1].getState(), not(TileState.FLAGGED));
         assertThat(board.getNFlags(), is(0));
     }

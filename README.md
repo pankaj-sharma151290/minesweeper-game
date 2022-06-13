@@ -102,7 +102,7 @@ Enter the number of mines (should be < height*width):
 Valid Commands:
            1. "help": opens the help menu
            2. "select": specify which tile you want to check
-           3. "flag": specify which tile you want to flag
+           3. "flag": specify which tile you want to flag or unflag
            4. "restart": start a new game
            5. "quit": to quit the game
            6. "showBoard": to display the current status

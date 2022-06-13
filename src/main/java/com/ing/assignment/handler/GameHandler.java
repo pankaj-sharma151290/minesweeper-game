@@ -6,10 +6,13 @@ import com.ing.assignment.model.Board;
 import com.ing.assignment.service.GameService;
 import com.ing.assignment.service.impl.GameServiceImpl;
 import com.ing.assignment.util.GameUtil;
+import org.springframework.stereotype.Component;
 
 import java.util.Scanner;
 
+@Component
 public class GameHandler {
+
     private GameService gameService = new GameServiceImpl();
     private Scanner scanner = new Scanner(System.in);
     private Board board;
@@ -41,7 +44,7 @@ public class GameHandler {
         System.out.println("Valid Commands:");
         System.out.println("           1. \"help\": opens the help menu");
         System.out.println("           2. \"select\": specify which tile you want to check");
-        System.out.println("           3. \"flag\": specify which tile you want to flag");
+        System.out.println("           3. \"flag\": specify which tile you want to flag or un-flag");
         System.out.println("           4. \"restart\": start a new game");
         System.out.println("           5. \"exit\": to quit the game");
         System.out.println("           6. \"showBoard\": to display the current status");
@@ -63,7 +66,7 @@ public class GameHandler {
                 selectTile();
                 break;
             case FLAG:
-                flagTile();
+                flagUnFlagTile();
                 break;
             case RESTART:
                 startGame();
@@ -80,19 +83,19 @@ public class GameHandler {
 
     public void selectTile() {
         int rowIndex, colIndex;
-        boolean gameOver;
+        boolean noTilesLeft;
         System.out.println("Enter row no from 1 to " + nBoardRow + ": ");
         rowIndex = scanner.nextInt() - 1;
         System.out.println("Enter column no from 1 to " + nBoardCol + ": ");
         colIndex = scanner.nextInt() - 1;
         if (isTileIndicesInRange(rowIndex, colIndex)) {
-            gameOver = gameService.selectTile(board, rowIndex, colIndex);
-            if (gameOver && board.getNUncoveredClearCells() == (board.getNRows() * board.getNCols()) - board.getNMines()) {
+            noTilesLeft = gameService.selectTile(board, rowIndex, colIndex);
+            if (noTilesLeft && board.getNUncoveredClearCells() == (board.getNRows() * board.getNCols()) - board.getNMines()) {
                 System.out.println("\n\nCongratulations, You have Won!!");
                 board.setGameStatus(GameStatus.WON);
                 GameUtil.printBoard(board);
                 System.out.println("\n\nYou can restart or exit the game!!");
-            } else if (gameOver) {
+            } else if (noTilesLeft) {
                 System.out.println("\n\nYou have hit the mine, try again!!");
                 GameUtil.printBoard(board);
             } else {
@@ -105,14 +108,14 @@ public class GameHandler {
         }
     }
 
-    public void flagTile() {
+    public void flagUnFlagTile() {
         int rowIndex, colIndex;
         System.out.println("Enter row no from 1 to " + nBoardRow + ": ");
         rowIndex = scanner.nextInt() - 1;
         System.out.println("Enter column no from 1 to " + nBoardCol + ": ");
         colIndex = scanner.nextInt() - 1;
         if (isTileIndicesInRange(rowIndex, colIndex)) {
-            gameService.addFlag(board, rowIndex, colIndex);
+            gameService.flagUnFlagTile(board, rowIndex, colIndex);
             System.out.println("\n\n");
             GameUtil.printBoard(board);
             System.out.println("\n\n");
